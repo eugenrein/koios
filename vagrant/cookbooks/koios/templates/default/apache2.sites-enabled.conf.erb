@@ -1,0 +1,33 @@
+ServerName localhost
+
+<VirtualHost *:80>
+    ServerName koios.vagrant
+
+    DocumentRoot /var/koios/current/web
+    ErrorLog /var/log/apache2/koios_error.log
+    CustomLog /var/log/apache2/koios_access.log combined
+    LogLevel debug
+
+    <Directory "/var/koios/current/.git/">
+        AllowOverride All
+        Order allow,deny
+        Deny from all
+    </Directory>
+    <Directory "/var/koios/current">
+        IndexIgnore *
+        DirectoryIndex index.php
+        AllowOverride All
+        Require all granted
+    </Directory>
+    <Directory "/var/koios/current/web">
+        RewriteEngine on
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule . index.php
+
+        IndexIgnore *
+        DirectoryIndex index.php
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
